@@ -1,5 +1,5 @@
 import styled from 'styled-components';
-import { FiTrash2 } from 'react-icons/fi';
+import { FiTrash2, FiEdit2 } from 'react-icons/fi';
 
 export const Container = styled.div``;
 
@@ -51,12 +51,13 @@ export const GridClients = styled.table`
     padding-bottom: 20px;
   }
 
-  tbody tr {
-    margin-bottom: 5px;
-  }
   thead td {
     padding: 12px 12px 0 0;
     border-bottom: 1px solid #eee;
+  }
+
+  tbody td {
+    margin-bottom: 50px;
   }
 
   img {
@@ -75,4 +76,20 @@ export const GridClients = styled.table`
 `;
 export const IconDelete = styled(FiTrash2)`
   cursor: pointer;
+`;
+
+export const IconEdit = styled(FiEdit2)`
+  cursor: pointer;
+`;
+
+export const AreaInput = styled.div`
+  width: 350px;
+`;
+
+export const AreaHeaderList = styled.div`
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+
+  margin-bottom: 20px;
 `;

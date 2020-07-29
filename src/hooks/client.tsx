@@ -24,6 +24,8 @@ interface ClientContextData {
   addNewClient(data: ClientState): void;
   loading: boolean;
   removeClient(data: ClientState[]): void;
+  showClient(show: ClientState): void;
+  editClientData: ClientState;
 }
 
 
@@ -31,6 +33,9 @@ const ClientContext = createContext<ClientContextData>({} as ClientContextData);
 
 const ClientProvider: React.FC = ({ children }) => {
   const [loading, setLoading] = useState(false);
+
+  const [showClientData, setShowClientData] = useState({} as ClientState);
+
   const [data, setData] = useState<ClientState[]>(() => {
     const clients = localStorage.getItem('@Faasp:clients');
     if (clients) {
@@ -46,6 +51,8 @@ const ClientProvider: React.FC = ({ children }) => {
 
     localStorage.setItem('@Faasp:clients', JSON.stringify(listClients));
 
+    setData(listClients);
+
     setLoading(false);
   }, []);
 
@@ -53,11 +60,19 @@ const ClientProvider: React.FC = ({ children }) => {
     localStorage.setItem('@Faasp:clients', JSON.stringify(listClients));
 
     setData(listClients);
-  }, [])
+  }, []);
+
+  const editClient = useCallback(() => {
+
+  }, []);
+
+  const showClient = useCallback((show: ClientState) => {
+    setShowClientData(show);
+  }, []);
 
   return (
     <ClientContext.Provider
-      value={{ client: data, addNewClient, loading, removeClient }}
+      value={{ client: data, addNewClient, loading, removeClient, showClient, editClientData: showClientData }}
     >
       {children}
     </ClientContext.Provider>

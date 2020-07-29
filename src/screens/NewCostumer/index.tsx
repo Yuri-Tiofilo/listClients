@@ -26,7 +26,10 @@ const NewCostumer: React.FC = () => {
   const [cellPhoneState, setcellPhoneState] = useState('');
   const [dateBirthState, setdateBirthState] = useState('');
 
-  const { addNewClient, loading } = useAuth();
+  const { addNewClient, loading, editClientData, showClient } = useAuth();
+
+  console.log('editClientData');
+  console.log(editClientData);
 
   const history = useHistory();
 
@@ -99,6 +102,7 @@ const NewCostumer: React.FC = () => {
     resto = (soma * 10) % 11;
 
     if((resto == 10) || (resto == 11)) resto = 0;
+
     if(resto != parseInt(inputCPF.substring(9, 10))) return addToast({
       type: 'error',
       title: 'Erro no CPF',
@@ -145,6 +149,12 @@ const NewCostumer: React.FC = () => {
     }
   }
 
+  function backHome(): void {
+    showClient({} as DTOFormNewCostumer);
+
+    history.goBack();
+  }
+
   return (
     <Container>
       {loading ? (
@@ -163,17 +173,21 @@ const NewCostumer: React.FC = () => {
           <CardNewCostumer>
             <AreaHeader>
               <AreaIcon>
-                <IconBackHome onClick={() => {history.goBack()}} />
+                <IconBackHome onClick={() => {backHome();}} />
               </AreaIcon>
               <Title>Novo Cliente</Title>
             </AreaHeader>
             <Form ref={formRef} onSubmit={formNewCustomer}>
-              <Input name="name" placeholder="Nome" />
-              <Input name="email" placeholder="E-mail" />
+              <Input name="name" placeholder="Nome" defaultValue={editClientData.name} />
+              <Input name="email" placeholder="E-mail" defaultValue={editClientData.email} />
               <Input
                 name="dateBirth"
                 placeholder="Data de nascimento"
-                value={dateBirthState}
+                value={
+                  editClientData.dateBirth !== undefined
+                  ? editClientData.dateBirth
+                  : dateBirthState
+                }
                 onChange={(text) => {
                   setdateBirthState(dateBirthMask(text.target.value));
                 }}
@@ -184,7 +198,11 @@ const NewCostumer: React.FC = () => {
                 name="cpf"
                 placeholder="CPF"
                 maxLength={14}
-                value={cpfState}
+                value={
+                  editClientData.cpf !== undefined
+                  ? editClientData.cpf
+                  : cpfState
+                }
                 onChange={(text) => {
                   setCpfState(cpfMask(text.target.value));
                 }}
@@ -194,7 +212,11 @@ const NewCostumer: React.FC = () => {
                 type="tel"
                 name="cellphone"
                 placeholder="Telefone"
-                value={cellPhoneState}
+                value={
+                  editClientData.cellphone !== undefined
+                  ? editClientData.cellphone
+                  : cellPhoneState
+                }
                 onChange={(text) => {
                   setcellPhoneState(celPhoneMask(text.target.value));
                 }}
@@ -206,8 +228,14 @@ const NewCostumer: React.FC = () => {
                 id="123"
                 maxLength={300}
                 placeholder="Observação"
+                defaultValue={editClientData.observation}
               />
-              <Button type="submit">ADICIONAR</Button>
+
+              {editClientData.cellphone !== undefined ? (
+                <Button type="submit">EDITAR</Button>
+              ): (
+                <Button type="submit">ADICIONAR</Button>
+              )}
             </Form>
           </CardNewCostumer>
         </>
